@@ -1,0 +1,130 @@
+\documentclass[aspectratio=169,handout]{beamer}
+
+% to create handouts comment above \document and uncomment the next 3 lines
+% \documentclass[12pt, handout, aspectratio=169]{beamer}
+% \usepackage{styles/handoutWithNotes} % requires handoutWithNotes.sty
+% \pgfpagesuselayout{4 on 1 with notes}[a4paper,border shrink=5mm]
+
+% packages
+\usepackage{graphicx}
+\usepackage{multicol}
+
+% presentation settings
+% custom theme modified from http://www.math.ucdenver.edu/~hbouwmee/resources.php
+% must have beamerthemeCU.sty and cu_logo.eps in styles directory
+\usepackage{styles/beamerthemeCU}
+\setbeamertemplate{section in toc}[sections numbered]
+
+% image path
+\graphicspath{ {images/} }
+
+% bibliography settings
+\setbeamertemplate{bibliography item}{}	%remove the icon
+%remove line breaks
+\setbeamertemplate{bibliography entry title}{}
+\setbeamertemplate{bibliography entry location}{}
+\setbeamertemplate{bibliography entry note}{}
+
+% presentation information
+\title{PlanetiQ Pyxis: Kalman Filter}
+\institute{University of Colorado Boulder}
+\author{Rane Brown}
+\date{\today}
+
+% start of presentation
+\begin{document}
+
+\begin{frame}[t,plain] % t = top align, plain = no header or footer
+    \titlepage
+\end{frame}
+
+\begin{frame}[t]{Table of Contents}
+	\begin{center}
+		\vspace{-2em}
+		{\Large \textbf{\underline{Outline}}}
+		\vspace{1em}
+	\end{center}
+	\begin{multicols}{2}
+		\tableofcontents
+	\end{multicols}
+\end{frame} 
+
+\section{Objectives}%-------------------------------------------------------------------------------
+
+	\begin{frame}{Independent Study Objectives}
+		\begin{itemize}
+			\item Basic understanding of the pyxis project and the importance of the kalman filter
+			\item Create unit tests for all crucial functions used by the kalman filter
+			\item Integrate C port of navigation filter into pyxis code framework
+			\item Analysis of various matrix libraries with pros and cons of each
+			\item Debugging of kalman filter upon integration into overall system
+			\item Testing, tuning, and profiling of kalman filter
+		\end{itemize}
+	\end{frame}
+
+\section{Big Picture}%------------------------------------------------------------------------------
+
+\subsection{Pyxis}
+	\begin{frame}{Purpose of Pyxis Project}
+	large scale software project
+	\end{frame}
+
+\subsection{Kalman Filter}
+	\begin{frame}{What is a Kalman Filter?}
+	\end{frame}
+
+\subsection{Coordinate Frames}
+	\begin{frame}{ECEF and ECI}
+	\cite{Waddington1959}
+	\cite{VanDyk1989}
+	\end{frame}
+
+\section{Code}%-------------------------------------------------------------------------------------
+
+\subsection{Approach}
+	\begin{frame}{Approach}
+		\begin{itemize}
+			\item incremental code and test
+			\item use previous C port of nav filter as base
+			\item different structs inputs/outputs from prev. version
+		\end{itemize}
+	\end{frame}
+
+\subsection{Check Framework}
+	\begin{frame}{Unit Tests}
+	\end{frame}
+
+\subsection{Git}
+	\begin{frame}{Importance of Git}
+	\end{frame}
+
+\subsection{Compatibility}
+	\begin{frame}{Compatibility between C and Matlab}
+		reading in files
+	\end{frame}
+
+\subsection{Matrix Libraries}
+	\begin{frame}{Linear Algebra}
+	\end{frame}
+
+\subsection{Testing}
+	\begin{frame}{Testing and Debugging}
+	\end{frame}
+
+\subsection{Status}
+	\begin{frame}{Future Work}
+	\end{frame}
+
+\section{Conclusion}%--------------------------------------------------------------------------
+	\begin{frame}{Lessons Learned}
+	\end{frame}
+
+\section{References}%-------------------------------------------------------------------------------
+
+	\begin{frame}[t]{References}
+			\footnotesize
+			\bibliographystyle{ieeetr} % must come before bib filename
+			\bibliography{bibliography/kal_ref} 
+	\end{frame}
+
+\end{document}
