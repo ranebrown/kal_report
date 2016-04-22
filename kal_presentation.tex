@@ -1,9 +1,9 @@
-\documentclass[10pt,aspectratio=169]{beamer}
+% \documentclass[10pt,aspectratio=169]{beamer}
 
 % to create handouts comment above \document and uncomment the next 3 lines
-% \documentclass[10pt, handout, aspectratio=169]{beamer}
-% \usepackage{styles/handoutWithNotes} % requires handoutWithNotes.sty
-% \pgfpagesuselayout{4 on 1 with notes}[a4paper,border shrink=5mm]
+\documentclass[10pt, handout, aspectratio=169]{beamer}
+\usepackage{styles/handoutWithNotes} % requires handoutWithNotes.sty
+\pgfpagesuselayout{4 on 1 with notes}[a4paper,border shrink=5mm]
 
 % packages
 \usepackage{graphicx}
@@ -27,6 +27,7 @@
 \setbeamertemplate{bibliography entry title}{}
 \setbeamertemplate{bibliography entry location}{}
 \setbeamertemplate{bibliography entry note}{}
+\setbeamertemplate{bibliography item}{\insertbiblabel} % display item numbers
 
 % presentation information
 \title{PlanetiQ Pyxis: Kalman Filter}
@@ -69,8 +70,7 @@
 
 \subsection{Pyxis}
 	\begin{frame}{Purpose of Pyxis Project}
-	\color{red}{ADD GOOD DESCRIPTION}\\
-	large scale software project
+	\color{red}{ADD GOOD DESCRIPTION}
 	\end{frame}
 
 \subsection{Kalman Filter}
@@ -117,39 +117,105 @@
 \subsection{Approach}
 	\begin{frame}{Approach}
 		\begin{itemize}
-			\item incremental code and test
-			\item use previous C port of nav filter as base
-			\item different structs inputs/outputs from prev. version
+			\item Matlab Navigation filter written by Daehee Won provides a baseline for desired output
+			\item Most functions were ported to C as part of the DLA Research Program
+			\begin{itemize}
+				\item Major structural changes necessary
+				\item Pyxis project uses threading and relies on communication between modules
+				\item Current C port still provides a good starting point
+			\end{itemize}
+			\item Incrementally write functions and utilize unit test framework to verify results
 		\end{itemize}
 	\end{frame}
 
 \subsection{Check Framework}
 	\begin{frame}{Unit Tests}
+		\begin{block}{}
+  		{{\Huge``} The incremental test/code approach provides three main benefits to the developer:
+  			\begin{enumerate}
+					\item Because the unit tests use the interface to the unit being tested, they allow the developer to think about how the interface should be designed for usage early in the coding process.
+					\item They help the developer think early about aberrant cases, and code accordingly.
+					\item By providing a documented level of correctness, they allow the developer to refactor aggressively.
+				\end{enumerate} {\Huge''}}\cite{check:2016}
+  		\vskip5mm
+		\end{block}{}
 	\end{frame}
 
 \subsection{Git}
 	\begin{frame}{Importance of Git}
+		\begin{itemize}
+			\item Pyxis project is setup as an organization on github
+			\item Each person works on separate branches and opens ``pull requests'' to merge code back onto the master branch
+			\item Provides important version control and separation of different modules
+			\item Cross platform compatibility
+		\end{itemize}
 	\end{frame}
 
 \subsection{Compatibility}
 	\begin{frame}{Compatibility between C and Matlab}
-		reading in files
+		The original Kalman filter was written in Matlab and the output is verified as correct.
+		\begin{itemize}
+			\item This provides a good baseline for testing the output of the C port
+			\item It is difficult to convert data into a format the can be read by C for testing
+				\begin{itemize}
+					\item The best approach was found to output the Matlab data to a text file
+					\item Use fscanf to read in data
+					\item Approach works but is cumbersome and can be prone to errors
+				\end{itemize}
+			\end{itemize}
 	\end{frame}
 
 \subsection{Matrix Libraries}
-	\begin{frame}{Linear Algebra}
+	\begin{frame}[t]{Linear Algebra}
+		The Kalman filter heavily utilizes linear algebra and matrix operations. This fact made obtaining a verified and function rich linear algebra library a priority.\\
+		\vspace{0.5em}
+		\textbf{Options:}
+		\begin{description}
+			\item[Meschach] Standalone library that is fairly fast and provides the needed functionality. Matrices are built using data structures that allow resizing.
+			\item[CBLA] C implementation of the BLAS (Basic Linear Algebra Subprograms) library which was originally written in Fortran. Widely used and well tested but most functions are low level and meant to be used as a base for a separate library.
+			\item[GSL] The GNU Scientific Library: uses BLAS as a base and provides over 1000 functions.
+			\item[Utils] Custom library developed for the Pyxis project - most functions needed for the Kalman filter are already present.
+		\end{description}
+
 	\end{frame}
 
 \subsection{Testing}
 	\begin{frame}{Testing and Debugging}
+		\begin{columns}
+			\begin{column}{0.6\textwidth}
+        \begin{itemize}
+        	\item Unit tests
+        	\item Matlab Navigation Filter as baseline
+        	\item Removal of redundant code
+        	\item Utilization of data structures
+        	\item Time filter takes to run (as expected?)
+        	\item Comparison to truth
+        	\item Tuning of configurable parameters
+        \end{itemize}
+			\end{column}
+			\begin{column}{0.4\textwidth}
+    			\begin{figure}
+            \centering
+     				\includegraphics[width=1\textwidth]{bug}
+            \caption{Debugging\cite{bug:2013}}
+     			\end{figure}
+			\end{column}
+		\end{columns}
 	\end{frame}
 
 \subsection{Status}
 	\begin{frame}{Future Work}
+		\color{red}{TBD based on final progress}
 	\end{frame}
 
 \section{Conclusion}%--------------------------------------------------------------------------
 	\begin{frame}{Lessons Learned}
+		\begin{enumerate}
+			\item Care must be taken to not create circular dependencies when working on projects with many separate files and headers
+			\item Doxygen is a useful tool for documenting code - it helps provides a better understanding of how a function is designed
+			\item Working on a large scale software project is challenging and communication is an essential part of the process
+			\item Writing code and debugging/testing can take more time than expected and planning for this eventuality can provide the needed time buffer
+		\end{enumerate}
 	\end{frame}
 
 \section{References}%-------------------------------------------------------------------------------
